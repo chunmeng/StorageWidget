@@ -24,7 +24,7 @@
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="com.tempura.StorageWidget.ACTION_WIDGET_CLICKED" />
+                <action android:name="com.tempura.storagewidget.BetterStorageWidget.ACTION_WIDGET_CLICKED" />
             </intent-filter>
             <meta-data 
                 android:name="android.appwidget.provider" 
