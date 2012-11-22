@@ -7,7 +7,7 @@
     android:updatePeriodMillis="86400000"  
     android:previewImage="@drawable/ic_launcher"
     android:initialLayout="@layout/storage_widget"
-    android:configure="com.tempura.WidgetConfigure" 
+    android:configure="com.tempura.storagewidget.WidgetConfigure" 
     android:resizeMode="horizontal|vertical">
 </appwidget-provider>
 
