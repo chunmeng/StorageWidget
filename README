@@ -5,10 +5,18 @@ A project to learn android widget
 The basic idea:
 - Provide a widget to display storage info on homescreen
 - Show each available storage unit (phone, sdcard) as progress bar
-  (++++++++ Free / Total ++-----)
+  Data   (++++++++ % Free / Total ++-----)
+  System (++++++++ % Free / Total ++-----)
+  SDCard (++++++++ % Free / Total ++-----)
 
 Advanced:
 - Support common cloud storage (dropbox, gdrive, skydrive etc)
+
+Update 2012/11/24:
+- Issues:
+  1. Long overflow in totalBytes calculation
+  2. Progressbar too thin
+  3. Problem loading widget after a while 
 
 Update 2012/11/22:
 - Basic framework done. Crash on adding widget (WidgetConfigure not working)

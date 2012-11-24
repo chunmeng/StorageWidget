@@ -5,4 +5,25 @@
     <string name="menu_settings">Settings</string>
     <string name="title_activity_configure">ConfigureActivity</string>
 
+    <!-- From DiskInfo for reference -->
+    <string name="hdrPartitions">Partitions:</string>
+    <string name="hdrMemory">Memory:</string>
+    <string name="used">Used:</string>
+    <string name="free">Free:</string>
+    <string name="memory">RAM</string>
+    <string name="swap">Swap</string>
+    <string name="about">About</string>
+    <string name="refresh">Refresh</string>
+    <string name="settings">Settings</string>
+    <string name="used_long">Space used:</string>
+    <string name="free_long">Space free:</string>
+    <string name="total">Total size:</string>
+    <string name="blksize">Block size:</string>
+    <string name="filesystem">File system:</string>
+    <string name="mounttype">Access type:</string>
+    <string name="readonly">Read only</string>
+    <string name="readwrite">Read/Write</string>
+    <string name="path">Full path:</string>
+    <string name="name">Name:</string>
+    <string name="refreshed">Refreshed</string>    
 </resources>

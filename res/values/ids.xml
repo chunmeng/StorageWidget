@@ -1,4 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item type="id" name="layout_main">false</item>
+    
+    <!-- From DiskInfo for reference -->
+    <item type="id" name="details_path_label">false</item>
+    <item type="id" name="details_path">false</item>
+    <item type="id" name="details_progress">false</item>
+    <item type="id" name="details_percentage">false</item>
+    <item type="id" name="details_size">false</item>
+    <item type="id" name="details_used">false</item>
+    <item type="id" name="details_free">false</item>
+    <item type="id" name="details_tr1">false</item>
+    <item type="id" name="details_blksize">false</item>
+    <item type="id" name="details_hr1">false</item>
+    <item type="id" name="details_tr2">false</item>
+    <item type="id" name="details_file_system">false</item>
+    <item type="id" name="details_hr2">false</item>
+    <item type="id" name="details_tr3">false</item>
+    <item type="id" name="details_mount_type">false</item>
+    <item type="id" name="details_hr3">false</item>
+    <item type="id" name="hdr_title">false</item>
+    <item type="id" name="partitions_list">false</item>
+    <item type="id" name="name">false</item>
+    <item type="id" name="used">false</item>
+    <item type="id" name="size">false</item>
+    <item type="id" name="progress">false</item>
+    <item type="id" name="percentage">false</item>
+    <item type="id" name="refresh">false</item>
+    <item type="id" name="settings">false</item>
+    <item type="id" name="about">false</item>    
 </resources>
