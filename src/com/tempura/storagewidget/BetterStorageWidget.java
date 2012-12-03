@@ -15,20 +15,18 @@ public class BetterStorageWidget extends AppWidgetProvider {
 	
 	public static void updateAppWidget(Context paramContext, AppWidgetManager paramAppWidgetManager, int paramInt) {
 		RemoteViews localRemoteViews = new RemoteViews(paramContext.getPackageName(), R.layout.storage_widget);
-				
-		StatFs localStatFs1 = new StatFs(Environment.getDataDirectory().getPath());
-		// TODO: Trouble with long overflow here
-	    long totalBlocks = (long)localStatFs1.getBlockCount() * localStatFs1.getBlockSize();
-	    long freeBlocks = (long)localStatFs1.getAvailableBlocks() * localStatFs1.getBlockSize();
-	    long freeMB = (freeBlocks / 1048576L) ;
-	    long totalMB = (totalBlocks / 1048576L) ; // 100%
+
+		// Internal data directory
+		// StatFs localStatFs1 = new StatFs(Environment.getDataDirectory().getPath());
+		// SD card
+		StatFs localStatFs1 = new StatFs(Environment.getExternalStorageDirectory().getPath());
+	    long totalMB = (long)localStatFs1.getBlockCount() * (long)localStatFs1.getBlockSize()/1048576L;
+	    long freeMB = (long)localStatFs1.getAvailableBlocks() * (long)localStatFs1.getBlockSize()/1048576L;
 	    	    
 	    // Set to the remote view's widget
-	    long freePercent = ((freeMB / totalMB) * 100L); 
-	    String text = freePercent + "% free "; // + "(" + freeMB + "/" + totalMB + ")";
-	    /*String text = Environment.getDataDirectory().getPath() + "= " 
-	    			+  localStatFs1.getBlockCount()
-	    			+ "*" + localStatFs1.getBlockSize(); */
+	    long freePercent = (freeMB * 100L) / totalMB; 
+	    String text = freePercent + "% free " + "(" + freeMB + "/" + totalMB + ")";
+
 	    localRemoteViews.setProgressBar(R.id.progressBar1, (int)100, (int)(100 - freePercent), false);
 	    localRemoteViews.setTextViewText(R.id.details_percentage, text);
 	    	    

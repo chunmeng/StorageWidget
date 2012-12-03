@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout android:paddingLeft="8.0dip" android:paddingTop="2.0dip" android:paddingRight="8.0dip" android:paddingBottom="6.0dip" android:layout_width="fill_parent" android:layout_height="fill_parent" android:stretchColumns="1"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <TableRow>
+        <TextView android:textSize="14.0sp" android:textColor="#ffffff00" android:id="@id/name" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_span="2" android:singleLine="true" />
+    </TableRow>
+    <TableRow>
+        <TextView android:textSize="14.0sp" android:id="@id/used" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_column="0" />
+        <TextView android:textSize="14.0sp" android:gravity="right" android:id="@id/size" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_column="1" />
+    </TableRow>
+    <FrameLayout android:layout_width="fill_parent" android:layout_height="fill_parent">
+        <ProgressBar android:layout_gravity="center" android:id="@id/progress" android:layout_width="fill_parent" android:layout_height="fill_parent" style="@android:style/Widget.ProgressBar.Horizontal" />
+        <TextView android:textSize="14.0sp" android:textColor="#ff222222" android:layout_gravity="center" android:id="@id/percentage" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+    </FrameLayout>
+</TableLayout>
