@@ -4,6 +4,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
     <string name="title_activity_configure">ConfigureActivity</string>
+    <string name="default_partition_title">Data</string>
 
     <!-- From DiskInfo for reference -->
     <string name="hdrPartitions">Partitions:</string>

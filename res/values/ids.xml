@@ -20,7 +20,7 @@
     <item type="id" name="details_mount_type">false</item>
     <item type="id" name="details_hr3">false</item>
     <item type="id" name="hdr_title">false</item>
-    <item type="id" name="partitions_list">false</item>
+    <item type="id" name="storage_list">false</item>
     <item type="id" name="name">false</item>
     <item type="id" name="used">false</item>
     <item type="id" name="size">false</item>

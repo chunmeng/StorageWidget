@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Environment;
 import android.os.StatFs;
+import android.widget.ListView;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
@@ -14,9 +15,16 @@ public class BetterStorageWidget extends AppWidgetProvider {
 	public static String ACTION_WIDGET_CLICKED = "ActionWidgetClicked";
 	
 	public static void updateAppWidget(Context paramContext, AppWidgetManager paramAppWidgetManager, int paramInt) {
-		RemoteViews localRemoteViews = new RemoteViews(paramContext.getPackageName(), R.layout.storage_widget);
-
-		// Internal data directory
+		// Set the list as view
+		RemoteViews widgetViews = new RemoteViews(paramContext.getPackageName(), R.layout.main_list);
+		
+		Intent intent = new Intent(paramContext, StorageListRemoteService.class);
+		
+		widgetViews.setRemoteAdapter(R.id.storage_list, intent);
+	    
+		// Fill up the list view
+		
+/*		// Internal data directory
 		// StatFs localStatFs1 = new StatFs(Environment.getDataDirectory().getPath());
 		// SD card
 		StatFs localStatFs1 = new StatFs(Environment.getExternalStorageDirectory().getPath());
@@ -29,8 +37,8 @@ public class BetterStorageWidget extends AppWidgetProvider {
 
 	    localRemoteViews.setProgressBar(R.id.progressBar1, (int)100, (int)(100 - freePercent), false);
 	    localRemoteViews.setTextViewText(R.id.details_percentage, text);
-	    	    
-	    paramAppWidgetManager.updateAppWidget(paramInt, localRemoteViews);
+*/	    	    
+	    paramAppWidgetManager.updateAppWidget(paramInt, widgetViews);
 	    return;
 	}
 	

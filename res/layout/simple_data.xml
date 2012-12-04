@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- android:background="@android:color/transparent"  --> 
 <LinearLayout 
     android:layout_gravity="center" 
     android:orientation="vertical" 
     android:id="@id/layout_main" 
-    android:background="@android:color/transparent" 
+    
     android:layout_width="match_parent" 
     android:layout_height="wrap_content"
     xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <FrameLayout
+    <FrameLayout        
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 	
 	    <TextView
-	        android:id="@id/details_percentage"
+	        android:id="@+id/simple_percentage"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_gravity="center"
@@ -22,7 +22,7 @@
 	        android:textSize="14.0sp" />
 
 	    <ProgressBar
-	        android:id="@+id/progressBar1"
+	        android:id="@+id/simple_progress"
 	        style="@android:style/Widget.ProgressBar.Horizontal"
 	        android:layout_width="match_parent"
 	        android:layout_height="match_parent"
@@ -32,12 +32,18 @@
 	        android:layout_marginTop="16.0dip" />
 
 	    <TextView
-	        android:id="@+id/textView1"
+	        android:id="@+id/simple_text_name"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:text="Phone"
+	        android:text="@string/default_partition_title"
+	        android:textStyle="bold"	        
+	        android:textColor="#ff1111aa"
 	        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     </FrameLayout>
+</LinearLayout>    
+<!-- 
 
-</LinearLayout>
+    
+
+ -->
