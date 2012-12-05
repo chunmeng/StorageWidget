@@ -13,7 +13,7 @@ public class WidgetConfigure extends Activity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {        
+    public boolean onCreateOptionsMenu(Menu menu) {
         return true;
     }
 }
