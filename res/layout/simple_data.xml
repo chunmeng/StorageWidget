@@ -28,8 +28,7 @@
         android:id="@+id/simple_text_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/default_partition_title"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/default_partition_title"        
         android:textColor="#ff1111aa"
         android:textStyle="bold" />
     	
@@ -52,4 +51,5 @@
     android:id="@id/layout_main" 
     xmlns:android="http://schemas.android.com/apk/res/android"    
  
+ android:textAppearance="?android:attr/textAppearanceMedium"
  -->

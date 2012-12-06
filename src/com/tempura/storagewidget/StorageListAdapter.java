@@ -83,6 +83,7 @@ public class StorageListAdapter extends BaseAdapter
         return;        
     }
 
+    //! UT method
     void generateTestList() {       
         if (nodeList == null) {
             nodeList = new ArrayList<StorageNode>();
@@ -112,19 +113,19 @@ public class StorageListAdapter extends BaseAdapter
     public RemoteViews getViewAt(int position) {
         // TODO Auto-generated method stub
         RemoteViews rv = new RemoteViews(this.mContext.getPackageName(), R.layout.simple_data);
-        StorageNode localDataItem;
+        StorageNode node;
         double d;       
-        localDataItem = (StorageNode)nodeList.get(position);
-        if (localDataItem.getSize().longValue() != 0L)
-            d = 100L * localDataItem.getFree().longValue() / localDataItem.getSize().longValue();
+        node = (StorageNode)nodeList.get(position);
+        if (node.getSize().longValue() != 0L)
+            d = 100L * node.getFree().longValue() / node.getSize().longValue();
         else
             d = 100.0D;
         
-        String text = d + "Free " + d + "% " 
-                        + "(" + localDataItem.getFree().longValue() 
-                        + "/" + localDataItem.getSize().longValue() + ")";
+        String text = "Free " + d + "% " 
+                        + "(" + node.getFreeDisplay() 
+                        + "/" + node.getSizeDisplay() + ")";
         
-        rv.setTextViewText(R.id.simple_text_name, localDataItem.getName() + "(" + localDataItem.getPath() + ")");
+        rv.setTextViewText(R.id.simple_text_name, node.getName() + " (" + node.getPath() + ")");
         rv.setProgressBar(R.id.simple_progress, (int)100, (int)(100.0D - d), false);
         rv.setTextViewText(R.id.simple_percentage, text);
         

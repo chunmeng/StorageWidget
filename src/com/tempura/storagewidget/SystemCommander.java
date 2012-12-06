@@ -46,6 +46,7 @@ public class SystemCommander {
         StorageNode sn = new StorageNode(StorageNode.partitionNames.get(envFile.getPath()), 
                 fs.getBlockCount(), fs.getAvailableBlocks());
         sn.setPath(envFile.getPath());
+        sn.setBlockSize(fs.getBlockSize());
         return sn;
     }
 }

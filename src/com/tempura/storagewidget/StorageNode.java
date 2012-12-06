@@ -1,5 +1,6 @@
 package com.tempura.storagewidget;
 
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,6 +17,11 @@ public class StorageNode implements Comparable, Parcelable {
     private String path;
     private Long size;
     private Long used;
+    
+    private static final long TB = 0x10000000000L;
+    private static final long GB = 0x40000000L;    
+    private static final long MB = 0x100000L;
+    private static final long KB = 0x400L;    
     
     //! A mapping for known mount point to a friendly name
     public static final Map<String, String> partitionNames = new HashMap<String, String>();
@@ -70,6 +76,34 @@ public class StorageNode implements Comparable, Parcelable {
         this.fileSystem = parcelIn.readString();
         this.mountType = parcelIn.readString();
     }    
+    
+    public static String formatSize(Long longSize)
+    {
+    	String str;
+        if (longSize.longValue() >= TB)
+            str = smartFormatter(Long.valueOf(longSize.longValue() / TB), longSize.doubleValue() / (double)TB, "TB");        
+        else if (longSize.longValue() >= GB)
+            str = smartFormatter(Long.valueOf(longSize.longValue() / GB), longSize.doubleValue() / (double)GB, "GB");
+        else if (longSize.longValue() >= 1048576L)
+            str = smartFormatter(Long.valueOf(longSize.longValue() / MB), longSize.doubleValue() / (double)KB, "MB");
+        else if (longSize.longValue() >= 1024L)
+            str = smartFormatter(Long.valueOf(longSize.longValue() / KB), longSize.doubleValue() / (double)KB, "KB");
+        else
+            str = "" + longSize + " B ";
+        
+        return str;      
+    }
+    
+    private static String smartFormatter(Long lSize, double dSize, String postFix)
+    {
+        DecimalFormat localDecimalFormat = new DecimalFormat("#.#");
+        String str;
+        if (lSize.longValue() < 100L)
+            str = localDecimalFormat.format(dSize) + " " + postFix; 
+        else
+            str = lSize + " " + postFix;
+        return str;
+    }    
 
     public StorageNode(String strName) {
         initialize();
@@ -102,11 +136,28 @@ public class StorageNode implements Comparable, Parcelable {
         return this.path;
     }
     
-    public void setPath(String sPath)
-    {
+    public void setPath(String sPath) {
         this.path = sPath;
     }    
 
+    public void setBlockSize(long lBlkSize) {
+        this.blksize = lBlkSize;
+    }
+    
+    public String getSizeDisplay() {
+        if (this.blksize == -1L)
+            return formatSize(this.size);
+        else
+            return formatSize(this.size * this.blksize);
+    }
+    
+    public String getFreeDisplay() {
+        if (this.blksize == -1L)
+            return formatSize(this.free);
+        else
+            return formatSize(this.free * this.blksize);        
+    }
+    
     @Override
     public int describeContents() {
         // TODO Auto-generated method stub
