@@ -26,5 +26,7 @@
     <string name="readwrite">Read/Write</string>
     <string name="path">Full path:</string>
     <string name="name">Name:</string>
-    <string name="refreshed">Refreshed</string>    
+    <string name="refreshed">Refreshed</string>
+    <string name="percent_full">100%</string>
+    <string name="loading_message">Calculating, please wait...</string>    
 </resources>

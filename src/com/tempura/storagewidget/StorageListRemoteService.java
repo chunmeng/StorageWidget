@@ -6,6 +6,6 @@ import android.widget.RemoteViewsService;
 public class StorageListRemoteService extends RemoteViewsService {
       public RemoteViewsService.RemoteViewsFactory onGetViewFactory(Intent paramIntent)
       {
-        return new StorageListAdapter(this);
+          return new StorageListAdapter(this);
       }
 }
