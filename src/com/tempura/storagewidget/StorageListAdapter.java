@@ -12,6 +12,7 @@ import android.widget.ProgressBar;
 import android.widget.RemoteViews;
 import android.widget.TextView;
 import android.widget.RemoteViewsService;
+import android.widget.Toast;
 
 public class StorageListAdapter extends BaseAdapter 
     implements RemoteViewsService.RemoteViewsFactory {
@@ -141,7 +142,7 @@ public class StorageListAdapter extends BaseAdapter
     @Override
     public void onDataSetChanged() {
         // TODO Auto-generated method stub
-        
+        Toast.makeText(this.mContext, "StorageWidget: Dataset change received", Toast.LENGTH_SHORT);
     }
 
     @Override

@@ -8,21 +8,27 @@
     android:layout_width="match_parent" 
     android:layout_height="wrap_content"
     xmlns:android="http://schemas.android.com/apk/res/android">
+
 <FrameLayout
-	android:layout_width="match_parent" 
-	android:layout_height="wrap_content"
- >
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="false"
+    android:focusable="false"
+    android:focusableInTouchMode="false"
+    android:longClickable="false">
 
 	<ProgressBar
 	    android:id="@+id/simple_progress"
 	    style="@android:style/Widget.ProgressBar.Horizontal"
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent"
-	    android:layout_marginBottom="16.0dip"
+	    android:layout_marginBottom="12.0dip"
 	    android:layout_marginLeft="8.0dip"
 	    android:layout_marginRight="8.0dip"
 	    android:layout_marginTop="16.0dip"
-	    android:alpha="180" />
+	    android:alpha="6"
+	    android:clickable="false"
+	    android:longClickable="false" />
 	
     <TextView
         android:id="@+id/simple_text_name"
