@@ -37,8 +37,7 @@ public class StorageNode implements Comparable, Parcelable {
         partitionNames.put("/mnt/extsdcard", "External SD card");
         partitionNames.put("/mnt/sdcard/external_sd", "External SD card");
         partitionNames.put("/mnt/emmc", "External SD card");
-        partitionNames.put("/mnt/external_sd", "External SD card");
-        partitionNames.put("/mnt/external_sd", "External SD card");
+        partitionNames.put("/mnt/external_sd", "External SD card");        
         partitionNames.put("/cache", "Cache");
         partitionNames.put("/mnt/cache", "Cache");
         partitionNames.put("/data/sdext", "SD-Ext");
@@ -84,9 +83,9 @@ public class StorageNode implements Comparable, Parcelable {
             str = smartFormatter(Long.valueOf(longSize.longValue() / TB), longSize.doubleValue() / (double)TB, "TB");        
         else if (longSize.longValue() >= GB)
             str = smartFormatter(Long.valueOf(longSize.longValue() / GB), longSize.doubleValue() / (double)GB, "GB");
-        else if (longSize.longValue() >= 1048576L)
-            str = smartFormatter(Long.valueOf(longSize.longValue() / MB), longSize.doubleValue() / (double)KB, "MB");
-        else if (longSize.longValue() >= 1024L)
+        else if (longSize.longValue() >= MB)
+            str = smartFormatter(Long.valueOf(longSize.longValue() / MB), longSize.doubleValue() / (double)MB, "MB");
+        else if (longSize.longValue() >= KB)
             str = smartFormatter(Long.valueOf(longSize.longValue() / KB), longSize.doubleValue() / (double)KB, "KB");
         else
             str = "" + longSize + " B ";

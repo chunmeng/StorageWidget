@@ -3,7 +3,10 @@ package com.tempura.storagewidget;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import android.appwidget.AppWidgetManager;
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,13 +20,18 @@ import android.widget.Toast;
 public class StorageListAdapter extends BaseAdapter 
     implements RemoteViewsService.RemoteViewsFactory {
 
-    private static ArrayList<StorageNode> nodeList; // A list of the available storage 
+    private final String TAG = "StorageWidget:Adapter";
+    private static ArrayList<StorageNode> nodeList; // A list of the available storage     
     
     private Context mContext;
+    private int mAppWidgetId;
     
-    public StorageListAdapter(Context paramContext) {
-        this.mContext = paramContext; 
-        
+    private int nCount; // Debug refresh count
+    
+    public StorageListAdapter(Context context, Intent intent) {
+        this.mContext = context;     
+        this.mAppWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
+                AppWidgetManager.INVALID_APPWIDGET_ID);
         // UT: Test sample data list
         // generateTestList();     
         
@@ -54,7 +62,8 @@ public class StorageListAdapter extends BaseAdapter
         return convertView;
     }
     
-    void generateStorageList() {
+    private void generateStorageList() {
+        nCount++;
         // If the list doesn't exist, create a new one
         if (nodeList == null) {
             nodeList = new ArrayList<StorageNode>();
@@ -85,7 +94,7 @@ public class StorageListAdapter extends BaseAdapter
     }
 
     //! UT method
-    void generateTestList() {       
+    private void generateTestList() {       
         if (nodeList == null) {
             nodeList = new ArrayList<StorageNode>();
         }
@@ -112,7 +121,7 @@ public class StorageListAdapter extends BaseAdapter
 
     @Override
     public RemoteViews getViewAt(int position) {
-        // TODO Auto-generated method stub
+        Log.d(TAG, "getViewAt " + position);
         RemoteViews rv = new RemoteViews(this.mContext.getPackageName(), R.layout.simple_data);
         StorageNode node;
         double d;       
@@ -122,11 +131,11 @@ public class StorageListAdapter extends BaseAdapter
         else
             d = 100.0D;
         
-        String text = "Free " + d + "% " 
+        String text = "[" + this.nCount + "] Free " + d + "% " 
                         + "(" + node.getFreeDisplay() 
                         + "/" + node.getSizeDisplay() + ")";
         
-        rv.setTextViewText(R.id.simple_text_name, node.getName() + " (" + node.getPath() + ")");
+        rv.setTextViewText(R.id.simple_text_name, "[" + this.mAppWidgetId + "]: " + node.getName() + " (" + node.getPath() + ")");
         rv.setProgressBar(R.id.simple_progress, (int)100, (int)(100.0D - d), false);
         rv.setTextViewText(R.id.simple_percentage, text);
         
@@ -136,13 +145,15 @@ public class StorageListAdapter extends BaseAdapter
     @Override
     public void onCreate() {
         // TODO Auto-generated method stub
-        
+        // Since we reload the cursor in onDataSetChanged() which gets called immediately after
+        // onCreate(), we do nothing here.        
     }
 
     @Override
     public void onDataSetChanged() {
         // TODO Auto-generated method stub
-        Toast.makeText(this.mContext, "StorageWidget: Dataset change received", Toast.LENGTH_SHORT);
+        Log.d(TAG, "onDataSetChanged");       
+        generateStorageList();        
     }
 
     @Override
