@@ -12,12 +12,16 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
+import android.util.Log;
 import android.widget.ListView;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class BetterStorageWidget extends AppWidgetProvider {
+    
+    private final String TAG = "StorageWidget:Provider";
+    
     public static String ACTION_WIDGET_CLICKED = "com.tempura.storagewidget.CLICK";
     public static String ACTION_WIDGET_REFRESH = "com.tempura.storagewidget.REFRESH";
 
@@ -93,11 +97,14 @@ public class BetterStorageWidget extends AppWidgetProvider {
                 updateAppWidget(context, mgr, id);
             **/           
             mgr.notifyAppWidgetViewDataChanged(arrayOfId, R.id.storage_list);
-                        
+            final int id = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+            Log.d(TAG, "onReceive->refresh: " + id);
             Toast.makeText(context, "Refreshing... " + arrayOfId.length, Toast.LENGTH_SHORT).show();
         }
         else if (action.equals(AppWidgetManager.ACTION_APPWIDGET_UPDATE)) {
             // Toast.makeText(context, "Updating storage info...", Toast.LENGTH_SHORT).show();
+            final int id = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+            Log.d(TAG, "onReceive->update: " + id);
             mgr.notifyAppWidgetViewDataChanged(arrayOfId, R.id.storage_list);
         }
         super.onReceive(context, intent);

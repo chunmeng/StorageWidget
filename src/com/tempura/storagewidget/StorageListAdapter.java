@@ -1,5 +1,6 @@
 package com.tempura.storagewidget;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -64,31 +65,34 @@ public class StorageListAdapter extends BaseAdapter
     
     private void generateStorageList() {
         nCount++;
+        
         // If the list doesn't exist, create a new one
         if (nodeList == null) {
             nodeList = new ArrayList<StorageNode>();
         }
-        
-        // If the list is not emptied, clear it
-        if (!nodeList.isEmpty()) {
-            nodeList.clear();
-        }
-        
-        // Get the local filesystem info
-        ArrayList<StorageNode> dfList = SystemCommander.getEnvFS(this.mContext);
-        if (!dfList.isEmpty()) {
-            Collections.sort(dfList);
-            nodeList.addAll(dfList);
-        }
 
-        // Get the mounted storage info
-        // ArrayList localArrayList2 = CommandsRunner.runCatMounts(this, localArrayList1);
-        
-        // Get the memory info
-        ArrayList memList = SystemCommander.runCatMeminfo(this.mContext);
-        if (!memList.isEmpty())
-        {
-            nodeList.addAll(memList);
+        synchronized (nodeList) {    
+            // If the list is not emptied, clear it
+            if (!nodeList.isEmpty()) {
+                nodeList.clear();
+            }
+            
+            // Get the local filesystem info
+            ArrayList<StorageNode> dfList = SystemCommander.getEnvFS(this.mContext);
+            if (!dfList.isEmpty()) {
+                Collections.sort(dfList);
+                nodeList.addAll(dfList);
+            }
+
+            // Get the mounted storage info
+            // ArrayList localArrayList2 = CommandsRunner.runCatMounts(this, localArrayList1);
+            
+            // Get the memory info
+            ArrayList memList = SystemCommander.runCatMeminfo(this.mContext);
+            if (!memList.isEmpty())
+            {
+                nodeList.addAll(memList);
+            }           
         }
         return;        
     }
@@ -116,29 +120,37 @@ public class StorageListAdapter extends BaseAdapter
     @Override
     public RemoteViews getLoadingView() {
         // Return a simple text view while loading
-    	return new RemoteViews(this.mContext.getPackageName(), R.layout.loading);
+        final RemoteViews rv = new RemoteViews(this.mContext.getPackageName(), R.layout.simple_data);
+        rv.setProgressBar(R.id.simple_progress, (int)100, 0, true); // show in progress
+        rv.setTextViewText(R.id.simple_percentage, this.mContext.getResources().getString(R.string.loading_message));
+    	return rv;
     }
 
     @Override
     public RemoteViews getViewAt(int position) {
-        Log.d(TAG, "getViewAt " + position);
-        RemoteViews rv = new RemoteViews(this.mContext.getPackageName(), R.layout.simple_data);
-        StorageNode node;
-        double d;       
-        node = (StorageNode)nodeList.get(position);
-        if (node.getSize().longValue() != 0L)
-            d = 100L * node.getFree().longValue() / node.getSize().longValue();
-        else
-            d = 100.0D;
+        Log.d(TAG, "getViewAt " + position + " - " + this.mAppWidgetId);
         
-        String text = /*"[" + this.nCount + "]*/ "Free " + d + "% " 
-                        + "(" + node.getFreeDisplay() 
-                        + "/" + node.getSizeDisplay() + ")";
-        
-        rv.setTextViewText(R.id.simple_text_name, /*"[" + this.mAppWidgetId + "]: " + */ node.getName() + " (" + node.getPath() + ")");
-        rv.setProgressBar(R.id.simple_progress, (int)100, (int)(100.0D - d), false);
-        rv.setTextViewText(R.id.simple_percentage, text);
-        
+        RemoteViews rv = new RemoteViews(this.mContext.getPackageName(), R.layout.simple_data_image);
+        try {
+            StorageNode node;
+            double d;       
+            node = (StorageNode)nodeList.get(position);
+            if (node.getSize().longValue() != 0L)
+                d = 100.0D * node.getFree().doubleValue() / node.getSize().doubleValue();
+            else
+                d = 100.0D;
+            
+            DecimalFormat df = new DecimalFormat("#.#"); 
+            String text = /*"[" + this.nCount + "]*/ "Free " + df.format(d) + "% " 
+                            + "(" + node.getFreeDisplay() 
+                            + "/" + node.getSizeDisplay() + ")";
+                        
+            rv.setTextViewText(R.id.simple_text_name, /*"[" + this.mAppWidgetId + "]: " +  */node.getName() + " (" + node.getPath() + ")");
+            rv.setProgressBar(R.id.simple_progress, (int)100, (int)(100.0D - d), false);
+            rv.setTextViewText(R.id.simple_percentage, text);            
+        } catch (Exception ex) {
+            Log.d(TAG, "Exception: " + ex.toString());
+        }
         return rv;
     }
 
@@ -152,7 +164,7 @@ public class StorageListAdapter extends BaseAdapter
     @Override
     public void onDataSetChanged() {
         // TODO Auto-generated method stub
-        Log.d(TAG, "onDataSetChanged");       
+        Log.d(TAG, "onDataSetChanged - " + this.mAppWidgetId);         
         generateStorageList();        
     }
 
