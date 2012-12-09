@@ -24,36 +24,43 @@ public class StorageNode implements Comparable, Parcelable {
     private static final long KB = 0x400L;    
     
     //! A mapping for known mount point to a friendly name
-    public static final Map<String, String> partitionNames = new HashMap<String, String>();
+    public static final Map<String, String> nodeMap = new HashMap<String, String>();
     
     static
     {
-        partitionNames.put("/system", "System");
-        partitionNames.put("/data", "Data");
-        partitionNames.put("/mnt/sdcard", "SD card");
-        partitionNames.put("/storage/sdcard0", "SD card");
-        partitionNames.put("/storage/sdcard1", "SD card 2");
-        partitionNames.put("/storage/extsdcard", "External SD card");
-        partitionNames.put("/mnt/extsdcard", "External SD card");
-        partitionNames.put("/mnt/sdcard/external_sd", "External SD card");
-        partitionNames.put("/mnt/emmc", "External SD card");
-        partitionNames.put("/mnt/external_sd", "External SD card");        
-        partitionNames.put("/cache", "Cache");
-        partitionNames.put("/mnt/cache", "Cache");
-        partitionNames.put("/data/sdext", "SD-Ext");
-        partitionNames.put("/data/sdext2", "SD-Ext2");
-        partitionNames.put("/data/sdext3", "SD-Ext3");
-        partitionNames.put("/data/sdext4", "SD-Ext4");
-        partitionNames.put("/sd-ext", "SD-Ext");
-        partitionNames.put("/sd-ext2", "SD-Ext2");
-        partitionNames.put("/sd-ext3", "SD-Ext3");
-        partitionNames.put("/sd-ext4", "SD-Ext4");
-        partitionNames.put("/system/sd", "SD-Ext");
-        partitionNames.put("/mnt/usbdisk", "USB drive");
+        nodeMap.put("/system", "System");
+        nodeMap.put("/data", "Data");
+        nodeMap.put("/mnt/sdcard", "SD card");
+        nodeMap.put("/storage/sdcard0", "SD card");
+        nodeMap.put("/storage/sdcard1", "SD card 2");
+        nodeMap.put("/storage/extsdcard", "External SD card");
+        nodeMap.put("/mnt/extsdcard", "External SD card");
+        nodeMap.put("/mnt/sdcard/external_sd", "External SD card");
+        nodeMap.put("/mnt/emmc", "External SD card");
+        nodeMap.put("/mnt/external_sd", "External SD card");        
+        nodeMap.put("/cache", "Cache");
+        nodeMap.put("/mnt/cache", "Cache");
+        nodeMap.put("/data/sdext", "SD-Ext");
+        nodeMap.put("/data/sdext2", "SD-Ext2");
+        nodeMap.put("/data/sdext3", "SD-Ext3");
+        nodeMap.put("/data/sdext4", "SD-Ext4");
+        nodeMap.put("/sd-ext", "SD-Ext");
+        nodeMap.put("/sd-ext2", "SD-Ext2");
+        nodeMap.put("/sd-ext3", "SD-Ext3");
+        nodeMap.put("/sd-ext4", "SD-Ext4");
+        nodeMap.put("/system/sd", "SD-Ext");
+        nodeMap.put("/mnt/usbdisk", "USB drive");
     }    
+    
+    public static final Map<String, Integer> iconMap = new HashMap<String, Integer>();
+    static {
+        iconMap.put("System", R.drawable.blue_device_28);
+        iconMap.put("Data", R.drawable.blue_data_04);
+        iconMap.put("SD card", R.drawable.blue_folder_03);
+        iconMap.put("Cache", R.drawable.blue_cache_11);		
+    }
 
-    private void initialize()
-    {
+    private void initialize() {
         this.name = "unknown";
         this.path = "";
         this.size = Long.valueOf(-1L);

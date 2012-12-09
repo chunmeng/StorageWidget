@@ -43,7 +43,7 @@ public class SystemCommander {
     
     private static StorageNode getStorageNode(File envFile) {
         StatFs fs = new StatFs(envFile.getPath());
-        StorageNode sn = new StorageNode(StorageNode.partitionNames.get(envFile.getPath()), 
+        StorageNode sn = new StorageNode(StorageNode.nodeMap.get(envFile.getPath()), 
                 fs.getBlockCount(), fs.getAvailableBlocks());
         sn.setPath(envFile.getPath());
         sn.setBlockSize(fs.getBlockSize());
