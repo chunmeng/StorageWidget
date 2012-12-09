@@ -88,18 +88,17 @@ public class BetterStorageWidget extends AppWidgetProvider {
         else if (action.equals(BetterStorageWidget.ACTION_WIDGET_REFRESH))
         {            
             // Check refresh from which widget is clicked
-            final int id = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
             /** This doesn't work. The StorageListAdapter doesn't go to constructor to update the list
+             * final int id = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);                          
                 updateAppWidget(context, mgr, id);
             **/           
             mgr.notifyAppWidgetViewDataChanged(arrayOfId, R.id.storage_list);
-            
-            Toast.makeText(context, "Refreshing... " + id + "/" + arrayOfId.length, Toast.LENGTH_SHORT).show();
-            
-            // TODO: Find out how to make a data change notification to StoragerListAdapter instead 
+                        
+            Toast.makeText(context, "Refreshing... " + arrayOfId.length, Toast.LENGTH_SHORT).show();
         }
         else if (action.equals(AppWidgetManager.ACTION_APPWIDGET_UPDATE)) {
-            Toast.makeText(context, "Updating storage info...", Toast.LENGTH_SHORT).show();
+            // Toast.makeText(context, "Updating storage info...", Toast.LENGTH_SHORT).show();
+            mgr.notifyAppWidgetViewDataChanged(arrayOfId, R.id.storage_list);
         }
         super.onReceive(context, intent);
     }

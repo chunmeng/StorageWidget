@@ -131,11 +131,11 @@ public class StorageListAdapter extends BaseAdapter
         else
             d = 100.0D;
         
-        String text = "[" + this.nCount + "] Free " + d + "% " 
+        String text = /*"[" + this.nCount + "]*/ "Free " + d + "% " 
                         + "(" + node.getFreeDisplay() 
                         + "/" + node.getSizeDisplay() + ")";
         
-        rv.setTextViewText(R.id.simple_text_name, "[" + this.mAppWidgetId + "]: " + node.getName() + " (" + node.getPath() + ")");
+        rv.setTextViewText(R.id.simple_text_name, /*"[" + this.mAppWidgetId + "]: " + */ node.getName() + " (" + node.getPath() + ")");
         rv.setProgressBar(R.id.simple_progress, (int)100, (int)(100.0D - d), false);
         rv.setTextViewText(R.id.simple_percentage, text);
         
