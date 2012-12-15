@@ -145,9 +145,14 @@ public class StorageListAdapter extends BaseAdapter
                             + "(" + node.getFreeDisplay() 
                             + "/" + node.getSizeDisplay() + ")";
                         
-            rv.setTextViewText(R.id.simple_text_name, /*"[" + this.mAppWidgetId + "]: " +  */node.getName() + " (" + node.getPath() + ")");
+            rv.setTextViewText(R.id.simple_text_name, /*"[" + this.mAppWidgetId + "]: " +  */node.getName());
+            rv.setTextViewText(R.id.simple_text_path, node.getPath());
             rv.setProgressBar(R.id.simple_progress, (int)100, (int)(100.0D - d), false);
-            rv.setTextViewText(R.id.simple_percentage, text);            
+            rv.setTextViewText(R.id.simple_percentage, text); 
+            Integer srcId = StorageNode.iconMap.get(node.getName());
+            if (srcId != null)
+                rv.setImageViewResource(R.id.storage_icon, srcId.intValue());
+            
         } catch (Exception ex) {
             Log.d(TAG, "Exception: " + ex.toString());
         }

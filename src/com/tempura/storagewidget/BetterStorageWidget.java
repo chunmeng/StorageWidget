@@ -107,6 +107,7 @@ public class BetterStorageWidget extends AppWidgetProvider {
             Log.d(TAG, "onReceive->update: " + id);
             mgr.notifyAppWidgetViewDataChanged(arrayOfId, R.id.storage_list);
         }
+
         super.onReceive(context, intent);
     }
 

@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.tempura.storagewidget"
-    android:versionCode="2"
-    android:versionName="1.0.1" >
+    android:versionCode="3"
+    android:versionName="1.0.2" >
 
     <uses-sdk
         android:minSdkVersion="11"
@@ -24,12 +24,22 @@
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <!--  action android:name="com.tempura.storagewidget.BetterStorageWidget.ACTION_WIDGET_CLICKED"  -->
-            </intent-filter>
+                <!--  action android:name="com.tempura.storagewidget.BetterStorageWidget.ACTION_WIDGET_CLICKED"  -->                
+                  
+            </intent-filter>           
             <meta-data 
                 android:name="android.appwidget.provider" 
                 android:resource="@xml/widget_provider" />
         </receiver>
+        <receiver android:name=".BetterStorageWidget.StorageEventReceiver" android:enabled="false"> 
+            <intent-filter>
+                <!--  These are used to get the card mount/unmounted event -->
+                <action android:name="android.intent.action.MEDIA_MOUNTED" />
+                <action android:name="android.intent.action.MEDIA_UNMOUNTED" />
+                <action android:name="android.intent.action.MEDIA_REMOVED" />
+                <data android:scheme="file" /> <!-- This is necessary for the receiver to work -->
+            </intent-filter>    
+        </receiver>     
         <service android:name=".StorageListRemoteService"
             android:permission="android.permission.BIND_REMOTEVIEWS"
             android:exported="false" ></service>        

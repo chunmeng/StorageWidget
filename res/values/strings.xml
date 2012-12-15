@@ -5,6 +5,7 @@
     <string name="menu_settings">Settings</string>
     <string name="title_activity_configure">ConfigureActivity</string>
     <string name="default_partition_title">Data</string>
+    <string name="default_partition_path">/data</string>
 
     <!-- From DiskInfo for reference -->
     <string name="hdrPartitions">Partitions:</string>
