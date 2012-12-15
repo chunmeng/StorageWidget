@@ -24,10 +24,11 @@ public class BetterStorageWidget extends AppWidgetProvider {
     
     public static String ACTION_WIDGET_CLICKED = "com.tempura.storagewidget.CLICK";
     public static String ACTION_WIDGET_REFRESH = "com.tempura.storagewidget.REFRESH";
+    public static String ACTION_WIDGET_ADD_NODE = "com.tempura.storagewidget.ADD_NODE";
 
     @SuppressWarnings("deprecation")
     @SuppressLint("NewApi")
-    public static void updateAppWidget(Context context, AppWidgetManager paramAppWidgetManager, int widgetId) {
+    public static void updateAppWidget(Context context, AppWidgetManager wm, int widgetId) {
         // Set the list as view
         RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.main_list);
 
@@ -71,12 +72,12 @@ public class BetterStorageWidget extends AppWidgetProvider {
         catch (Exception ex) {
             ex.printStackTrace();
         }
-        paramAppWidgetManager.updateAppWidget(widgetId, rv);        
+        wm.updateAppWidget(widgetId, rv);        
         return;
     }
 
-    public void onEnabled(Context paramContext) {
-        super.onEnabled(paramContext);
+    public void onEnabled(Context context) {
+        super.onEnabled(context);
     }
 
     public void onReceive(Context context, Intent intent) {        

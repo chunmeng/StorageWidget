@@ -37,7 +37,8 @@ public class StorageNode implements Comparable, Parcelable {
         nodeMap.put("/mnt/extsdcard", "External SD card");
         nodeMap.put("/mnt/sdcard/external_sd", "External SD card");
         nodeMap.put("/mnt/emmc", "External SD card");
-        nodeMap.put("/mnt/external_sd", "External SD card");        
+        nodeMap.put("/mnt/external_sd", "External SD card");
+        nodeMap.put("/Removable/MicroSD", "External SD card");
         nodeMap.put("/cache", "Cache");
         nodeMap.put("/mnt/cache", "Cache");
         nodeMap.put("/data/sdext", "SD-Ext");
@@ -50,7 +51,6 @@ public class StorageNode implements Comparable, Parcelable {
         nodeMap.put("/sd-ext4", "SD-Ext4");
         nodeMap.put("/system/sd", "SD-Ext");
         nodeMap.put("/mnt/usbdisk", "USB drive");
-        nodeMap.put("/Removable/MicroSD", "External SD card");
     }    
     
     public static final Map<String, Integer> iconMap = new HashMap<String, Integer>();
@@ -58,7 +58,8 @@ public class StorageNode implements Comparable, Parcelable {
         iconMap.put("System", R.drawable.blue_device_28);
         iconMap.put("Data", R.drawable.blue_data_04);
         iconMap.put("SD card", R.drawable.blue_folder_03);
-        iconMap.put("Cache", R.drawable.blue_cache_11);		
+        iconMap.put("Cache", R.drawable.blue_cache_11);	
+        iconMap.put("External", R.drawable.blue_external_36);
     }
 
     private void initialize() {

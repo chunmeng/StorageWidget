@@ -31,14 +31,20 @@
                 android:name="android.appwidget.provider" 
                 android:resource="@xml/widget_provider" />
         </receiver>
-        <receiver android:name=".BetterStorageWidget.StorageEventReceiver" android:enabled="false"> 
-            <intent-filter>
-                <!--  These are used to get the card mount/unmounted event -->
+        <receiver android:name=".StorageEventReceiver">
+            <!--  These are used to get the card mount/unmounted event --> 
+            <intent-filter>                
                 <action android:name="android.intent.action.MEDIA_MOUNTED" />
-                <action android:name="android.intent.action.MEDIA_UNMOUNTED" />
-                <action android:name="android.intent.action.MEDIA_REMOVED" />
                 <data android:scheme="file" /> <!-- This is necessary for the receiver to work -->
             </intent-filter>    
+            <intent-filter>                
+                <action android:name="android.intent.action.MEDIA_UNMOUNTED" />                
+                <data android:scheme="file" /> <!-- This is necessary for the receiver to work -->
+            </intent-filter>               
+            <intent-filter>
+                <action android:name="android.intent.action.MEDIA_REMOVED" />
+                <data android:scheme="file" /> <!-- This is necessary for the receiver to work -->
+            </intent-filter>               
         </receiver>     
         <service android:name=".StorageListRemoteService"
             android:permission="android.permission.BIND_REMOTEVIEWS"

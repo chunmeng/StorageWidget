@@ -6,6 +6,7 @@
     <string name="title_activity_configure">ConfigureActivity</string>
     <string name="default_partition_title">Data</string>
     <string name="default_partition_path">/data</string>
+    <string name="icon_description">Storage Type</string>
 
     <!-- From DiskInfo for reference -->
     <string name="hdrPartitions">Partitions:</string>

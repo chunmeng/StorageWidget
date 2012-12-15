@@ -80,7 +80,7 @@ public class StorageListAdapter extends BaseAdapter
             // Get the local filesystem info
             ArrayList<StorageNode> dfList = SystemCommander.getEnvFS(this.mContext);
             if (!dfList.isEmpty()) {
-                Collections.sort(dfList);
+                //Collections.sort(dfList);
                 nodeList.addAll(dfList);
             }
 
@@ -149,9 +149,16 @@ public class StorageListAdapter extends BaseAdapter
             rv.setTextViewText(R.id.simple_text_path, node.getPath());
             rv.setProgressBar(R.id.simple_progress, (int)100, (int)(100.0D - d), false);
             rv.setTextViewText(R.id.simple_percentage, text); 
-            Integer srcId = StorageNode.iconMap.get(node.getName());
-            if (srcId != null)
+            Integer srcId = -1;
+            if (node.getName().contains("External")) {
+                srcId = StorageNode.iconMap.get("External");
+            } else {
+                srcId = StorageNode.iconMap.get(node.getName());
+            }                
+            
+            if (srcId != null && srcId != -1) {                
                 rv.setImageViewResource(R.id.storage_icon, srcId.intValue());
+            }
             
         } catch (Exception ex) {
             Log.d(TAG, "Exception: " + ex.toString());
