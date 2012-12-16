@@ -20,7 +20,7 @@
             </intent-filter>
         </activity>
         <receiver 
-            android:name=".BetterStorageWidget"
+            android:name="com.tempura.storagewidget.BetterStorageWidgetProvider"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />

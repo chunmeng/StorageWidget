@@ -25,7 +25,7 @@ public class StorageEventReceiver extends BroadcastReceiver {
             StorageListAdapter.addExternalNode(intent.getDataString().replace("file://", ""));
             // Trigger widget update?
             final AppWidgetManager mgr = AppWidgetManager.getInstance(context);
-            int[] arrayOfId = mgr.getAppWidgetIds(new ComponentName(context.getPackageName(), BetterStorageWidget.class.getName()));
+            int[] arrayOfId = mgr.getAppWidgetIds(new ComponentName(context.getPackageName(), BetterStorageWidgetProvider.class.getName()));
             mgr.notifyAppWidgetViewDataChanged(arrayOfId, R.id.storage_list);
             
         } else if (action.equals(Intent.ACTION_MEDIA_REMOVED) 
@@ -35,7 +35,7 @@ public class StorageEventReceiver extends BroadcastReceiver {
             StorageListAdapter.removeExternalNode(intent.getDataString().replace("file://", ""));
             // Trigger widget update?
             final AppWidgetManager mgr = AppWidgetManager.getInstance(context);
-            int[] arrayOfId = mgr.getAppWidgetIds(new ComponentName(context.getPackageName(), BetterStorageWidget.class.getName()));            
+            int[] arrayOfId = mgr.getAppWidgetIds(new ComponentName(context.getPackageName(), BetterStorageWidgetProvider.class.getName()));            
             mgr.notifyAppWidgetViewDataChanged(arrayOfId, R.id.storage_list);
         }
         

@@ -1,13 +1,19 @@
 package com.tempura.storagewidget;
 
+import java.util.Random;
+
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
+import android.content.ContentResolver;
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -18,7 +24,7 @@ import android.widget.RemoteViews;
 import android.widget.Toast;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public class BetterStorageWidget extends AppWidgetProvider {
+public class BetterStorageWidgetProvider extends AppWidgetProvider {
     
     private final String TAG = "StorageWidget:Provider";
     
@@ -50,11 +56,11 @@ public class BetterStorageWidget extends AppWidgetProvider {
             // cannot set up their own pending intents. Instead, the collection as a whole sets
             // up a pending intent template, and the individual items set a fillInIntent
             // to create unique behavior on an item-by-item basis.
-            Intent clickIntent = new Intent(context, BetterStorageWidget.class);
+            Intent clickIntent = new Intent(context, BetterStorageWidgetProvider.class);
             // Set the action for the intent.
             // When the user touches a particular view, it will have the effect of
             // broadcasting ACTION_WIDGET_CLICKED.
-            clickIntent.setAction(BetterStorageWidget.ACTION_WIDGET_CLICKED);
+            clickIntent.setAction(BetterStorageWidgetProvider.ACTION_WIDGET_CLICKED);
             clickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
             intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
             PendingIntent onClickIntent = PendingIntent.getBroadcast(context, widgetId, clickIntent,
@@ -62,8 +68,8 @@ public class BetterStorageWidget extends AppWidgetProvider {
             rv.setPendingIntentTemplate(R.id.storage_list, onClickIntent);    
             
             // Bind the click intent for the refresh button on the widget
-            final Intent refreshIntent = new Intent(context, BetterStorageWidget.class);
-            refreshIntent.setAction(BetterStorageWidget.ACTION_WIDGET_REFRESH);
+            final Intent refreshIntent = new Intent(context, BetterStorageWidgetProvider.class);
+            refreshIntent.setAction(BetterStorageWidgetProvider.ACTION_WIDGET_REFRESH);
             refreshIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
             final PendingIntent refreshPendingIntent = PendingIntent.getBroadcast(context, widgetId,
                     refreshIntent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -82,19 +88,22 @@ public class BetterStorageWidget extends AppWidgetProvider {
 
     public void onReceive(Context context, Intent intent) {        
         final AppWidgetManager mgr = AppWidgetManager.getInstance(context);
-        int[] arrayOfId = mgr.getAppWidgetIds(new ComponentName(context.getPackageName(), BetterStorageWidget.class.getName()));
+        int[] arrayOfId = mgr.getAppWidgetIds(new ComponentName(context.getPackageName(), BetterStorageWidgetProvider.class.getName()));
         final String action = intent.getAction();
         // TODO: Handle click only at the moment
-        if (action.equals(BetterStorageWidget.ACTION_WIDGET_CLICKED))
+        if (action.equals(BetterStorageWidgetProvider.ACTION_WIDGET_CLICKED))
         {
             // onUpdate(paramContext, localAppWidgetManager, arrayOfId);
             Toast.makeText(context, "Storage widget clicked...", Toast.LENGTH_SHORT).show();
         }
-        else if (action.equals(BetterStorageWidget.ACTION_WIDGET_REFRESH))
+        else if (action.equals(BetterStorageWidgetProvider.ACTION_WIDGET_REFRESH))
         {            
             // Check refresh from which widget is clicked
-            /** This doesn't work. The StorageListAdapter doesn't go to constructor to update the list
-             * final int id = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);                          
+            /** NOTE: 
+                This doesn't work. The StorageListAdapter doesn't go to constructor to update the list 
+             **/
+        	/**
+                final int id = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);                          
                 updateAppWidget(context, mgr, id);
             **/           
             mgr.notifyAppWidgetViewDataChanged(arrayOfId, R.id.storage_list);
@@ -106,7 +115,7 @@ public class BetterStorageWidget extends AppWidgetProvider {
             // Toast.makeText(context, "Updating storage info...", Toast.LENGTH_SHORT).show();
             final int id = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
             Log.d(TAG, "onReceive->update: " + id);
-            mgr.notifyAppWidgetViewDataChanged(arrayOfId, R.id.storage_list);
+            mgr.notifyAppWidgetViewDataChanged(arrayOfId, R.id.storage_list);          
         }
 
         super.onReceive(context, intent);
@@ -119,4 +128,26 @@ public class BetterStorageWidget extends AppWidgetProvider {
         }
         super.onUpdate(context, appWidgetManager, appWidgetIds);
     }
+    
+    //! This method refresh the data set for storage node.
+    private void updateData(Context context) {
+        
+        final ContentResolver r = context.getContentResolver();
+        final Cursor c = r.query(StorageDataProvider.CONTENT_URI, null, null, null, 
+                null);
+        /*
+        // Update existing node
+        final int count = c.getCount();        
+        for (int i = 0; i < count; ++i) {
+            final Uri uri = ContentUris.withAppendedId(WeatherDataProvider.CONTENT_URI, i);
+            final ContentValues values = new ContentValues();
+            values.put(WeatherDataProvider.Columns.TEMPERATURE,
+                    new Random().nextInt(maxDegrees));
+            r.update(uri, values, null, null);
+        } 
+        
+        // TODO: Insert new node if any
+        */    	
+    }
+    
 }
