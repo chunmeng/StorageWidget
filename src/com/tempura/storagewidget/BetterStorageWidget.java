@@ -100,7 +100,7 @@ public class BetterStorageWidget extends AppWidgetProvider {
             mgr.notifyAppWidgetViewDataChanged(arrayOfId, R.id.storage_list);
             final int id = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
             Log.d(TAG, "onReceive->refresh: " + id);
-            Toast.makeText(context, "Refreshing... " + arrayOfId.length, Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Refreshing " + arrayOfId.length + " storage widget", Toast.LENGTH_SHORT).show();
         }
         else if (action.equals(AppWidgetManager.ACTION_APPWIDGET_UPDATE)) {
             // Toast.makeText(context, "Updating storage info...", Toast.LENGTH_SHORT).show();

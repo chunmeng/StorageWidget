@@ -51,6 +51,7 @@ public class StorageNode implements Comparable, Parcelable {
         nodeMap.put("/sd-ext4", "SD-Ext4");
         nodeMap.put("/system/sd", "SD-Ext");
         nodeMap.put("/mnt/usbdisk", "USB drive");
+        nodeMap.put("/storage/emulated/0", "SD card");  // Nexus-7, JB
     }    
     
     public static final Map<String, Integer> iconMap = new HashMap<String, Integer>();

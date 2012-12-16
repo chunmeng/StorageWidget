@@ -13,6 +13,14 @@ Advanced:
 - Support common cloud storage (dropbox, gdrive, skydrive etc)
 
 Update 2012/12/15:
+Release 1.0.3
+- Fix a JB crash (due to new path /storage/emulated/0)
+- Partial external SD card support 
+
+Known issue:
+- If the external card is already seated, it's not detected (the widget only detect it by receiving mount/unmount event)
+- Sometime the External SD card would display when the widget refresh itself  
+
 Release 1.0.2 
 - Additional layout and UI change
   > Added custom progress bar

@@ -22,7 +22,8 @@ public class StorageListAdapter extends BaseAdapter
     implements RemoteViewsService.RemoteViewsFactory {
 
     private final String TAG = "StorageWidget:Adapter";
-    private static ArrayList<StorageNode> nodeList; // A list of the available storage     
+    private static ArrayList<StorageNode> nodeList; // A list of the available storage  
+    private static ArrayList<String> extNodePathList; 
     
     private Context mContext;
     private int mAppWidgetId;
@@ -33,6 +34,10 @@ public class StorageListAdapter extends BaseAdapter
         this.mContext = context;     
         this.mAppWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                 AppWidgetManager.INVALID_APPWIDGET_ID);
+        
+        if (extNodePathList == null) {
+            extNodePathList = new ArrayList<String>();
+        }        
         // UT: Test sample data list
         // generateTestList();     
         
@@ -83,9 +88,14 @@ public class StorageListAdapter extends BaseAdapter
                 //Collections.sort(dfList);
                 nodeList.addAll(dfList);
             }
-
+            
             // Get the mounted storage info
             // ArrayList localArrayList2 = CommandsRunner.runCatMounts(this, localArrayList1);
+            if (!extNodePathList.isEmpty()) {
+                for (int i = 0; i < extNodePathList.size(); ++i) {
+                    nodeList.add(SystemCommander.getStorageNode(extNodePathList.get(i)));
+                }
+            }
             
             // Get the memory info
             ArrayList memList = SystemCommander.runCatMeminfo(this.mContext);
@@ -109,6 +119,24 @@ public class StorageListAdapter extends BaseAdapter
         }
     }   
     
+    public static void addExternalNode(String path) {
+        if (extNodePathList == null)
+            return;
+        
+        if (!extNodePathList.contains(path)) {
+            extNodePathList.add(path);
+        }
+    }
+
+    public static void removeExternalNode(String path) {
+        if (extNodePathList == null)
+            return;
+
+        if (extNodePathList.contains(path)) {
+            extNodePathList.remove(path);
+        }
+    }
+        
     // This is a object holder for layout defined in simple_data.xml
     static class SimpleViewHolder
     {
@@ -161,7 +189,7 @@ public class StorageListAdapter extends BaseAdapter
             }
             
         } catch (Exception ex) {
-            Log.d(TAG, "Exception: " + ex.toString());
+            Log.d(TAG, "Exception: " + ex.getMessage());
         }
         return rv;
     }

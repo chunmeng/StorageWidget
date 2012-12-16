@@ -45,9 +45,13 @@ public class SystemCommander {
         return getStorageNode(envFile.getPath());
     }
     
-    private static StorageNode getStorageNode(String path) {
+    public static StorageNode getStorageNode(String path) {
         StatFs fs = new StatFs(path);
-        StorageNode sn = new StorageNode(StorageNode.nodeMap.get(path), 
+        String name = StorageNode.nodeMap.get(path);
+        if (name == null) { // If the path is not known before, this will be null
+            name = "Generic";
+        }
+        StorageNode sn = new StorageNode(name, 
                 fs.getBlockCount(), fs.getAvailableBlocks());
         sn.setPath(path);
         sn.setBlockSize(fs.getBlockSize());      
