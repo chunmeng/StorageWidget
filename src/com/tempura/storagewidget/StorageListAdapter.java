@@ -7,6 +7,7 @@ import java.util.Collections;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,124 +19,32 @@ import android.widget.TextView;
 import android.widget.RemoteViewsService;
 import android.widget.Toast;
 
-public class StorageListAdapter extends BaseAdapter 
-    implements RemoteViewsService.RemoteViewsFactory {
+public class StorageListAdapter implements RemoteViewsService.RemoteViewsFactory {
 
     private final String TAG = "StorageWidget:Adapter";
-    private static ArrayList<StorageNode> nodeList; // A list of the available storage  
-    private static ArrayList<String> extNodePathList; 
     
     private Context mContext;
     private int mAppWidgetId;
-    
-    private int nCount; // Debug refresh count
+    private Cursor mCursor; //< A cursor is a resultset of a database query
     
     public StorageListAdapter(Context context, Intent intent) {
         this.mContext = context;     
         this.mAppWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                 AppWidgetManager.INVALID_APPWIDGET_ID);
-        
-        if (extNodePathList == null) {
-            extNodePathList = new ArrayList<String>();
-        }        
-        // UT: Test sample data list
-        // generateTestList();     
-        
-        generateStorageList();
     }
     
     @Override
     public int getCount() {
-        // TODO Auto-generated method stub
-        return nodeList.size();
-    }
-
-    @Override
-    public Object getItem(int position) {
-        // TODO Auto-generated method stub
-        return nodeList.get(position);
+        if (mCursor == null)
+        	return 0;
+        return mCursor.getCount();
     }
 
     @Override
     public long getItemId(int position) {
         // TODO Auto-generated method stub
         return position;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        // TODO Auto-generated method stub    
-        return convertView;
-    }
-    
-    private void generateStorageList() {
-        nCount++;
-        
-        // If the list doesn't exist, create a new one
-        if (nodeList == null) {
-            nodeList = new ArrayList<StorageNode>();
-        }
-
-        synchronized (nodeList) {    
-            // If the list is not emptied, clear it
-            if (!nodeList.isEmpty()) {
-                nodeList.clear();
-            }
-            
-            // Get the local filesystem info
-            ArrayList<StorageNode> dfList = SystemCommander.getEnvFS(this.mContext);
-            if (!dfList.isEmpty()) {
-                //Collections.sort(dfList);
-                nodeList.addAll(dfList);
-            }
-            
-            // Get the mounted storage info
-            // ArrayList localArrayList2 = CommandsRunner.runCatMounts(this, localArrayList1);
-            if (!extNodePathList.isEmpty()) {
-                for (int i = 0; i < extNodePathList.size(); ++i) {
-                    nodeList.add(SystemCommander.getStorageNode(extNodePathList.get(i)));
-                }
-            }
-            
-            // Get the memory info
-            ArrayList memList = SystemCommander.runCatMeminfo(this.mContext);
-            if (!memList.isEmpty())
-            {
-                nodeList.addAll(memList);
-            }           
-        }
-        return;        
-    }
-
-    //! UT method
-    private void generateTestList() {       
-        if (nodeList == null) {
-            nodeList = new ArrayList<StorageNode>();
-        }
-        
-        if (nodeList.isEmpty()) {
-            nodeList.add(new StorageNode("Test Data", 100L, 20L));
-            nodeList.add(new StorageNode("Test SDCard", 200L, 100L));
-        }
-    }   
-    
-    public static void addExternalNode(String path) {
-        if (extNodePathList == null)
-            return;
-        
-        if (!extNodePathList.contains(path)) {
-            extNodePathList.add(path);
-        }
-    }
-
-    public static void removeExternalNode(String path) {
-        if (extNodePathList == null)
-            return;
-
-        if (extNodePathList.contains(path)) {
-            extNodePathList.remove(path);
-        }
-    }
+    }    
         
     // This is a object holder for layout defined in simple_data.xml
     static class SimpleViewHolder
@@ -160,28 +69,42 @@ public class StorageListAdapter extends BaseAdapter
         
         RemoteViews rv = new RemoteViews(this.mContext.getPackageName(), R.layout.simple_data_image);
         try {
-            StorageNode node;
-            double d;       
-            node = (StorageNode)nodeList.get(position);
-            if (node.getSize().longValue() != 0L)
-                d = 100.0D * node.getFree().doubleValue() / node.getSize().doubleValue();
-            else
-                d = 100.0D;
+        	// Get the raw data from cursor table
+        	String name = "Unknown";
+        	String path = "/unknown";
+        	long size = 0L;
+        	long free = 0L;
+        	
+            if (mCursor.moveToPosition(position)) {
+                final int nameColIndex = mCursor.getColumnIndex(StorageDataProvider.Columns.NAME);
+                final int pathColIndex = mCursor.getColumnIndex(StorageDataProvider.Columns.PATH);
+                final int sizeColIndex = mCursor.getColumnIndex(StorageDataProvider.Columns.SIZE);
+                final int freeColIndex = mCursor.getColumnIndex(StorageDataProvider.Columns.FREE);
+                
+                name = mCursor.getString(nameColIndex);
+                path = mCursor.getString(pathColIndex);
+                size = mCursor.getLong(sizeColIndex);
+                free = mCursor.getLong(freeColIndex);
+            }
+                        
+            double d = 0.0D;                   
+            if (size != 0L)
+                d = 100.0D * (double)free / (double)size;
             
             DecimalFormat df = new DecimalFormat("#.#"); 
-            String text = /*"[" + this.nCount + "]*/ "Free " + df.format(d) + "% " 
-                            + "(" + node.getFreeDisplay() 
-                            + "/" + node.getSizeDisplay() + ")";
+            String text = "Free " + df.format(d) + "% " 
+                            + "(" + StorageNode.formatSize(free) 
+                            + "/" + StorageNode.formatSize(size) + ")";
                         
-            rv.setTextViewText(R.id.simple_text_name, /*"[" + this.mAppWidgetId + "]: " +  */node.getName());
-            rv.setTextViewText(R.id.simple_text_path, node.getPath());
+            rv.setTextViewText(R.id.simple_text_name, name);
+            rv.setTextViewText(R.id.simple_text_path, path);
             rv.setProgressBar(R.id.simple_progress, (int)100, (int)(100.0D - d), false);
             rv.setTextViewText(R.id.simple_percentage, text); 
             Integer srcId = -1;
-            if (node.getName().contains("External")) {
+            if (name.contains("External")) {
                 srcId = StorageNode.iconMap.get("External");
             } else {
-                srcId = StorageNode.iconMap.get(node.getName());
+                srcId = StorageNode.iconMap.get(name);
             }                
             
             if (srcId != null && srcId != -1) {                
@@ -190,6 +113,7 @@ public class StorageListAdapter extends BaseAdapter
             
         } catch (Exception ex) {
             Log.d(TAG, "Exception: " + ex.getMessage());
+            ex.printStackTrace();
         }
         return rv;
     }
@@ -203,14 +127,29 @@ public class StorageListAdapter extends BaseAdapter
 
     @Override
     public void onDataSetChanged() {
-        // TODO Auto-generated method stub
         Log.d(TAG, "onDataSetChanged - " + this.mAppWidgetId);         
-        generateStorageList();        
+        // Refresh the cursor
+        if (mCursor != null) {
+            mCursor.close();
+        }
+        mCursor = mContext.getContentResolver().query(StorageDataProvider.CONTENT_URI, null, null,
+                null, null);
     }
 
     @Override
     public void onDestroy() {
-        // TODO Auto-generated method stub
-        
-    }   
+        if (mCursor != null) {
+            mCursor.close();
+        }        
+    }
+
+	@Override
+	public int getViewTypeCount() { 
+		return 1;
+	}
+
+	@Override
+	public boolean hasStableIds() { 
+		return true;
+	}   
 }

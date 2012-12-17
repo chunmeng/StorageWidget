@@ -21,22 +21,22 @@ public class StorageEventReceiver extends BroadcastReceiver {
             AppWidgetManager gm = AppWidgetManager.getInstance(context);
             //Toast.makeText(context, intent.getDataString().replace("file://", "") + " mounted...\nHandling to be added.", Toast.LENGTH_SHORT).show();
             
-            // Should not be static?
+/*            // Should not be static?
             StorageListAdapter.addExternalNode(intent.getDataString().replace("file://", ""));
             // Trigger widget update?
             final AppWidgetManager mgr = AppWidgetManager.getInstance(context);
             int[] arrayOfId = mgr.getAppWidgetIds(new ComponentName(context.getPackageName(), BetterStorageWidgetProvider.class.getName()));
-            mgr.notifyAppWidgetViewDataChanged(arrayOfId, R.id.storage_list);
+            mgr.notifyAppWidgetViewDataChanged(arrayOfId, R.id.storage_list);*/
             
         } else if (action.equals(Intent.ACTION_MEDIA_REMOVED) 
                     || action.equals(Intent.ACTION_MEDIA_UNMOUNTED)) {
             //Toast.makeText(context, intent.getDataString().replace("file://", "") + " removed...\nHandling to be added.", Toast.LENGTH_SHORT).show();
             // Should not be static?
-            StorageListAdapter.removeExternalNode(intent.getDataString().replace("file://", ""));
+            /*StorageListAdapter.removeExternalNode(intent.getDataString().replace("file://", ""));
             // Trigger widget update?
             final AppWidgetManager mgr = AppWidgetManager.getInstance(context);
             int[] arrayOfId = mgr.getAppWidgetIds(new ComponentName(context.getPackageName(), BetterStorageWidgetProvider.class.getName()));            
-            mgr.notifyAppWidgetViewDataChanged(arrayOfId, R.id.storage_list);
+            mgr.notifyAppWidgetViewDataChanged(arrayOfId, R.id.storage_list);*/
         }
         
     }

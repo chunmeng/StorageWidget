@@ -99,22 +99,26 @@ public class BetterStorageWidgetProvider extends AppWidgetProvider {
         else if (action.equals(BetterStorageWidgetProvider.ACTION_WIDGET_REFRESH))
         {            
             // Check refresh from which widget is clicked
-            /** NOTE: 
-                This doesn't work. The StorageListAdapter doesn't go to constructor to update the list 
-             **/
-        	/**
-                final int id = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);                          
-                updateAppWidget(context, mgr, id);
-            **/           
-            mgr.notifyAppWidgetViewDataChanged(arrayOfId, R.id.storage_list);
             final int id = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
             Log.d(TAG, "onReceive->refresh: " + id);
             Toast.makeText(context, "Refreshing " + arrayOfId.length + " storage widget", Toast.LENGTH_SHORT).show();
+
+        	/** NOTE TO SELF: 
+                This doesn't work. The StorageListAdapter doesn't go to constructor to update the list 
+
+                final int id = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);                          
+                updateAppWidget(context, mgr, id);
+            **/           
+            /** NOTE TO SELF:
+             * Do nothing here because a query will force the refresh of data. Bad design but well...
+             */
+            mgr.notifyAppWidgetViewDataChanged(arrayOfId, R.id.storage_list);
         }
         else if (action.equals(AppWidgetManager.ACTION_APPWIDGET_UPDATE)) {
             // Toast.makeText(context, "Updating storage info...", Toast.LENGTH_SHORT).show();
             final int id = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
             Log.d(TAG, "onReceive->update: " + id);
+
             mgr.notifyAppWidgetViewDataChanged(arrayOfId, R.id.storage_list);          
         }
 
@@ -128,26 +132,4 @@ public class BetterStorageWidgetProvider extends AppWidgetProvider {
         }
         super.onUpdate(context, appWidgetManager, appWidgetIds);
     }
-    
-    //! This method refresh the data set for storage node.
-    private void updateData(Context context) {
-        
-        final ContentResolver r = context.getContentResolver();
-        final Cursor c = r.query(StorageDataProvider.CONTENT_URI, null, null, null, 
-                null);
-        /*
-        // Update existing node
-        final int count = c.getCount();        
-        for (int i = 0; i < count; ++i) {
-            final Uri uri = ContentUris.withAppendedId(WeatherDataProvider.CONTENT_URI, i);
-            final ContentValues values = new ContentValues();
-            values.put(WeatherDataProvider.Columns.TEMPERATURE,
-                    new Random().nextInt(maxDegrees));
-            r.update(uri, values, null, null);
-        } 
-        
-        // TODO: Insert new node if any
-        */    	
-    }
-    
 }

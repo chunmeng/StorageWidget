@@ -49,6 +49,11 @@
         <service android:name=".StorageListRemoteService"
             android:permission="android.permission.BIND_REMOTEVIEWS"
             android:exported="false" ></service>        
+            
+        <!-- The content provider serving the storage data to display -->
+        <!-- NOTE TO SELF: Must not use .StorageDataProvider, or else will get Failed to find provider info error  -->
+        <provider android:name="StorageDataProvider"
+              android:authorities="com.tempura.storagewidget.provider" />        
     </application>
 
 </manifest>

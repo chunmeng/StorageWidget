@@ -26,6 +26,11 @@ public class StorageNode implements Comparable, Parcelable {
     //! A mapping for known mount point to a friendly name
     public static final Map<String, String> nodeMap = new HashMap<String, String>();
     
+    /**
+     * NOTE TO SELF: 
+     * About external (removable) storage, it's a mess. Mount point is per manufacturer. 
+     * The best hope is to run a "df" command and analyze the output. 
+     */
     static
     {
         nodeMap.put("/system", "System");
@@ -35,10 +40,10 @@ public class StorageNode implements Comparable, Parcelable {
         nodeMap.put("/storage/sdcard1", "SD card 2");
         nodeMap.put("/storage/extsdcard", "External SD card");
         nodeMap.put("/mnt/extsdcard", "External SD card");
-        nodeMap.put("/mnt/sdcard/external_sd", "External SD card");
+        nodeMap.put("/mnt/sdcard/external_sd", "External SD card");  //!< Samsung galaxy family
         nodeMap.put("/mnt/emmc", "External SD card");
         nodeMap.put("/mnt/external_sd", "External SD card");
-        nodeMap.put("/Removable/MicroSD", "External SD card");
+        nodeMap.put("/removable/microsd", "External SD card"); 		//!< Asus transformer prime
         nodeMap.put("/cache", "Cache");
         nodeMap.put("/mnt/cache", "Cache");
         nodeMap.put("/data/sdext", "SD-Ext");
@@ -51,7 +56,7 @@ public class StorageNode implements Comparable, Parcelable {
         nodeMap.put("/sd-ext4", "SD-Ext4");
         nodeMap.put("/system/sd", "SD-Ext");
         nodeMap.put("/mnt/usbdisk", "USB drive");
-        nodeMap.put("/storage/emulated/0", "SD card");  // Nexus-7, JB
+        // nodeMap.put("/storage/emulated/0", "SD card");  // Nexus-7, JB - this is emulated
     }    
     
     public static final Map<String, Integer> iconMap = new HashMap<String, Integer>();
@@ -65,7 +70,7 @@ public class StorageNode implements Comparable, Parcelable {
 
     private void initialize() {
         this.name = "unknown";
-        this.path = "";
+        this.path = "/unknown";
         this.size = Long.valueOf(-1L);
         this.used = Long.valueOf(-1L);
         this.free = Long.valueOf(-1L);
@@ -86,6 +91,11 @@ public class StorageNode implements Comparable, Parcelable {
         this.mountType = parcelIn.readString();
     }    
     
+    public static boolean isPartitionImportant(String mountPoint)
+    {
+    	return nodeMap.containsKey(mountPoint.toLowerCase());
+    }
+    
     public static String formatSize(Long longSize)
     {
     	String str;
@@ -101,17 +111,53 @@ public class StorageNode implements Comparable, Parcelable {
             str = "" + longSize + " B ";
         
         return str;      
-    }
+    }    
     
     private static String smartFormatter(Long lSize, double dSize, String postFix)
     {
-        DecimalFormat localDecimalFormat = new DecimalFormat("#.#");
+        DecimalFormat df = new DecimalFormat("#.#");
         String str;
         if (lSize.longValue() < 100L)
-            str = localDecimalFormat.format(dSize) + " " + postFix; 
+            str = df.format(dSize) + " " + postFix; 
         else
             str = lSize + " " + postFix;
         return str;
+    } 
+    
+    private static Long sizeInBytes(String sizeStr)
+    {
+    	if ((sizeStr == null) || (sizeStr.length() < 2))
+    		throw new IllegalArgumentException("size string is null.");
+      
+    	// Convert last character to uppercase
+    	Character lastChar = Character.toUpperCase(sizeStr.charAt(-1 + sizeStr.length()));
+      
+    	Long size = 0L;
+    	if ((lastChar.equals('T')) || (lastChar.equals('G')) || (lastChar.equals('M')) || (lastChar.equals('K')))
+    	{
+    		size = Long.parseLong(sizeStr.substring(0, -1 + sizeStr.length()));
+    		switch (lastChar.charValue())
+    		{
+    			case 'T':
+    				size = TB * size.longValue();
+    				break;
+    			case 'G':
+    				size = GB * size.longValue();
+    				break;
+    			case 'M':
+    				size = MB * size.longValue();
+    				break;
+    			case 'K':
+    				size = KB * size.longValue();
+    				break;
+    			default:    				
+    				break;
+    		}
+    	} else {
+    		size = Long.parseLong(sizeStr);
+    	}
+    		
+    	return size;
     }    
 
     public StorageNode(String strName) {
@@ -120,7 +166,8 @@ public class StorageNode implements Comparable, Parcelable {
         this.path = ("--" + strName);
     }
 
-    public StorageNode(String strName, long lSize, long lFree) {
+    // Prevent use
+    private StorageNode(String strName, long lSize, long lFree) {
         initialize();
         this.name = strName;
         this.path = ("--" + strName);
@@ -128,6 +175,16 @@ public class StorageNode implements Comparable, Parcelable {
         this.free = lFree;
         this.used = lSize - lFree;
     }
+    
+    public StorageNode(String strName, String strPath, long lSize, long lFree, long lBlkSize) {
+        initialize();
+        this.name = strName;
+        this.path = strPath;
+        this.size = lSize;
+        this.free = lFree;
+        this.used = lSize - lFree;
+        this.blksize = lBlkSize;
+    }    
 
     public String getName() {
         return this.name;
@@ -152,6 +209,10 @@ public class StorageNode implements Comparable, Parcelable {
     public void setBlockSize(long lBlkSize) {
         this.blksize = lBlkSize;
     }
+
+    public Long getBlkSize() {
+    	return this.blksize;
+    }    
     
     public String getSizeDisplay() {
         if (this.blksize == -1L)
@@ -167,6 +228,20 @@ public class StorageNode implements Comparable, Parcelable {
             return formatSize(this.free * this.blksize);        
     }
     
+    public long getSizeRaw() {
+        if (this.blksize == -1L)
+            return this.size;
+        else
+            return this.size * this.blksize;    	
+    }
+    
+    public long getFreeRaw() {
+        if (this.blksize == -1L)
+            return this.free;
+        else
+            return this.free * this.blksize;    
+    }
+        
     @Override
     public int describeContents() {
         // TODO Auto-generated method stub
@@ -190,15 +265,12 @@ public class StorageNode implements Comparable, Parcelable {
         return this.name.compareTo(((StorageNode)paramObject).getName());
     }
     
-    public static final Parcelable.Creator<StorageNode> CREATOR = new Parcelable.Creator()
-    {
-        public StorageNode createFromParcel(Parcel parcelIn)
-        {
+    public static final Parcelable.Creator<StorageNode> CREATOR = new Parcelable.Creator<StorageNode>() {
+        public StorageNode createFromParcel(Parcel parcelIn) {
             return new StorageNode(parcelIn);
         }
 
-        public StorageNode[] newArray(int count)
-        {
+        public StorageNode[] newArray(int count) {
             return new StorageNode[count];
         }
     };    
