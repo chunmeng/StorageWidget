@@ -102,6 +102,13 @@ public class StorageDataProvider extends ContentProvider {
             }
             
             // Get the memory info
+            ArrayList<StorageNode> dfList2 = SystemCommander.runDf(getContext());
+            if (!dfList.isEmpty()) {
+            	// Add none duplicate
+            	
+            }
+            
+            // Get the memory info
             ArrayList<StorageNode> memList = SystemCommander.runCatMeminfo(getContext());
             if (!memList.isEmpty())
             {
@@ -112,7 +119,7 @@ public class StorageDataProvider extends ContentProvider {
     }
 
     //! UT method
-    private void generateTestList() {               
+    private void generateTestData() {               
         if (sData.isEmpty()) {
         	sData.add(new StorageNode("Data", "/data", 100L, 20L, 1L));
         	sData.add(new StorageNode("SD Card", "/sdcard", 200L, 100L, 1L));

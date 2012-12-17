@@ -39,56 +39,41 @@ public class SystemCommander {
         StorageNode localDataItem;
         try
         {
-          proc = Runtime.getRuntime().exec("df");
-          bufReader = new BufferedReader(new InputStreamReader(proc.getInputStream()));
-          boolean IsHeaderRow = false;
-          String str = bufReader.readLine();
-          while (str != null)
-          {
-        	  if (!str.startsWith("Filesystem")) // Skip header row
-        	  {        		  
-        		  // parse
-        		  arrayOfString = str.split(" +"); // break it down
+        	proc = Runtime.getRuntime().exec("df");
+        	bufReader = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+        	boolean IsHeaderRow = false;
+        	String str = bufReader.readLine();
+        	while (str != null)
+        	{
+        		if (!str.startsWith("Filesystem")) // Skip header row
+        		{        		  
+        			// parse
+        			arrayOfString = str.split(" +"); // break it down
         		
-        		  if (arrayOfString.length == 6) {
-        			  Log.d(TAG, "Parsing: " + str + " (" + arrayOfString.length + ")");
-        		  }
-        		  
-        	  }
-        	  str = bufReader.readLine(); // read next line
-          }
+        			if (arrayOfString.length == 5) {
+        				Log.d(TAG, "Parsing: " + str + " (" + arrayOfString.length + ")");
+        				// Get the mount point
+        				String path = arrayOfString[0].replace(":", "");
+        			  
+        				// Check if important?        			  
+        				if (StorageNode.isPartitionImportant(path)) {
+        					Log.d(TAG, "--- " + path + " is important!");
+        					// Yes - Pass the path to StatFs to get stats
+        					// Create the storageNode
+        			  
+        					// Add it to list aList.add(localDataItem);
+        				}
+        			}        		  
+        		}
+        		str = bufReader.readLine(); // read next line
+        	}
           
-          bufReader.close();
-          proc.waitFor();
-          
-          
-                          
-              if (arrayOfString.length != 6)
-                break label166;
-              localDataItem = new StorageNode(3, arrayOfString);
-              label123: if (!paramBoolean)
-                break label202;
-              aList.add(localDataItem);
-            }
-          }
+        	bufReader.close();
+        	proc.waitFor();         
+        } catch (Exception ex) {
+        	Log.d(TAG, "df: " + ex.getMessage());
+        	ex.printStackTrace();
         }
-        catch (Exception ex)
-        {
-          Log.d(TAG, "df: " + ex.getMessage());
-        }
-        while (true)
-        {
-          label166: localDataItem = new StorageNode(1, arrayOfString);
-          break label123;
-          label184: localDataItem = new StorageNode(2, arrayOfString);
-          break label123;
-          label202: if (!StorageNode.isPartitionImportant(localDataItem.getPath()))
-            break;
-          aList.add(localDataItem);
-
-        }
-      }
-    
         return aList;
     }
     
@@ -130,7 +115,7 @@ public class SystemCommander {
         return sn;
     }
     
-    public boolean parseDfString(Integer paramInteger, String[] paramArrayOfString)
+/*    public boolean parseDfString(Integer paramInteger, String[] paramArrayOfString)
     {     
       if (paramArrayOfString == null);
       while (true)
@@ -207,5 +192,5 @@ public class SystemCommander {
         {
         }
       }
-    }    
+    }    */
 }
