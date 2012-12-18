@@ -96,16 +96,17 @@ public class StorageDataProvider extends ContentProvider {
             }
             
             // Get the local filesystem info
+            /*
             ArrayList<StorageNode> dfList = SystemCommander.getEnvFS(getContext());
             if (!dfList.isEmpty()) {
             	sData.addAll(dfList);
-            }
+            }*/
             
             // Get the memory info
-            ArrayList<StorageNode> dfList2 = SystemCommander.runDf(getContext());
+            ArrayList<StorageNode> dfList = SystemCommander.runDf(getContext());
             if (!dfList.isEmpty()) {
             	// Add none duplicate
-            	
+            	sData.addAll(dfList);
             }
             
             // Get the memory info

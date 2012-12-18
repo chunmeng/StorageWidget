@@ -36,18 +36,15 @@ public class SystemCommander {
         Process proc;
         BufferedReader bufReader;
         String[] arrayOfString;
-        StorageNode localDataItem;
         try
         {
         	proc = Runtime.getRuntime().exec("df");
         	bufReader = new BufferedReader(new InputStreamReader(proc.getInputStream()));
-        	boolean IsHeaderRow = false;
         	String str = bufReader.readLine();
         	while (str != null)
         	{
         		if (!str.startsWith("Filesystem")) // Skip header row
         		{        		  
-        			// parse
         			arrayOfString = str.split(" +"); // break it down
         		
         			if (arrayOfString.length == 5) {
@@ -59,9 +56,20 @@ public class SystemCommander {
         				if (StorageNode.isPartitionImportant(path)) {
         					Log.d(TAG, "--- " + path + " is important!");
         					// Yes - Pass the path to StatFs to get stats
-        					// Create the storageNode
-        			  
-        					// Add it to list aList.add(localDataItem);
+        					// Is this the external storage path?
+        					if (Environment.getExternalStorageDirectory().getPath().equals(path)) {
+        						// Add only if not emulated
+        						if (!Environment.isExternalStorageEmulated()) {
+        				        	StorageNode sdNode = getStorageNode(path);
+        				        	if (sdNode != null)
+        				        		aList.add(sdNode);
+        						}
+        					} else {
+        						// Create the storageNode
+        						StorageNode node = getStorageNode(path);
+    				        	if (node != null)
+    				        		aList.add(node);        					     					
+        					}
         				}
         			}        		  
         		}
@@ -105,9 +113,16 @@ public class SystemCommander {
         return getStorageNode(envFile.getPath());
     }
     
-    public static StorageNode getStorageNode(String path) {
-        StatFs fs = new StatFs(path);
-        String name = StorageNode.nodeMap.get(path);
+    public static StorageNode getStorageNode(String path) {        
+    	StatFs fs = null;
+    	try {
+    		fs = new StatFs(path);
+    	} catch (Exception ex) {
+    		ex.printStackTrace();
+    		return null;
+    	}
+    	
+    	String name = StorageNode.nodeMap.get(path.toLowerCase());
         if (name == null) { // If the path is not known before, this will be null
             name = "Generic";
         }

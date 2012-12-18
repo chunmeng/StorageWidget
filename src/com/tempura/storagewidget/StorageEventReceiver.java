@@ -19,24 +19,23 @@ public class StorageEventReceiver extends BroadcastReceiver {
         if (action.equals(Intent.ACTION_MEDIA_MOUNTED)) {
             
             AppWidgetManager gm = AppWidgetManager.getInstance(context);
-            //Toast.makeText(context, intent.getDataString().replace("file://", "") + " mounted...\nHandling to be added.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, intent.getDataString().replace("file://", "") + " mounted...", Toast.LENGTH_SHORT).show();
             
-/*            // Should not be static?
-            StorageListAdapter.addExternalNode(intent.getDataString().replace("file://", ""));
-            // Trigger widget update?
+            // Trigger widget update - which should just rescan mounts
             final AppWidgetManager mgr = AppWidgetManager.getInstance(context);
             int[] arrayOfId = mgr.getAppWidgetIds(new ComponentName(context.getPackageName(), BetterStorageWidgetProvider.class.getName()));
-            mgr.notifyAppWidgetViewDataChanged(arrayOfId, R.id.storage_list);*/
+            mgr.notifyAppWidgetViewDataChanged(arrayOfId, R.id.storage_list);
             
         } else if (action.equals(Intent.ACTION_MEDIA_REMOVED) 
                     || action.equals(Intent.ACTION_MEDIA_UNMOUNTED)) {
-            //Toast.makeText(context, intent.getDataString().replace("file://", "") + " removed...\nHandling to be added.", Toast.LENGTH_SHORT).show();
-            // Should not be static?
-            /*StorageListAdapter.removeExternalNode(intent.getDataString().replace("file://", ""));
-            // Trigger widget update?
+            Toast.makeText(context, intent.getDataString().replace("file://", "") + " removed...", Toast.LENGTH_SHORT).show();
+            
+            // TODO: Need to delayed the data changed notify for 1-2s. 
+            // It seems the unmount will take sometime to reflect on the df table, and the external sd still appear. 
+        	// Trigger widget update - which should just rescan mounts
             final AppWidgetManager mgr = AppWidgetManager.getInstance(context);
             int[] arrayOfId = mgr.getAppWidgetIds(new ComponentName(context.getPackageName(), BetterStorageWidgetProvider.class.getName()));            
-            mgr.notifyAppWidgetViewDataChanged(arrayOfId, R.id.storage_list);*/
+            mgr.notifyAppWidgetViewDataChanged(arrayOfId, R.id.storage_list);
         }
         
     }
