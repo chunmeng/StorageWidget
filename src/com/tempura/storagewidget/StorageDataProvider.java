@@ -61,8 +61,14 @@ public class StorageDataProvider extends ContentProvider {
 			String[] selectionArgs, String sortOrder) {
         assert(uri.getPathSegments().isEmpty());
 
+        /**
+         * NOTE TO SELF:
+         * DO NOT refresh data here, as each widget will query on dataChanged, and sData is static. 
+         * If multiple widgets are put on screen, some will get empty data.
+         */
+        
         // Force a refresh on query
-        refreshData();
+        //refreshData();
         
         // Only support query without any parameters, so we can just return a cursor to
         // all the storage data.
@@ -80,8 +86,9 @@ public class StorageDataProvider extends ContentProvider {
 	@Override
 	public synchronized int update(Uri uri, ContentValues values, String selection,
 			String[] selectionArgs) {
-		// TODO Auto-generated method stub
-		return 0;
+		// refresh data regardless of input param
+		refreshData();
+		return sData.size();
 	}
 	
 	/**

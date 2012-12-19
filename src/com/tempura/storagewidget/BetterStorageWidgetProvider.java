@@ -109,9 +109,8 @@ public class BetterStorageWidgetProvider extends AppWidgetProvider {
                 final int id = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);                          
                 updateAppWidget(context, mgr, id);
             **/           
-            /** NOTE TO SELF:
-             * Do nothing here because a query will force the refresh of data. Bad design but well...
-             */
+            updateData(context);
+            
             mgr.notifyAppWidgetViewDataChanged(arrayOfId, R.id.storage_list);
         }
         else if (action.equals(AppWidgetManager.ACTION_APPWIDGET_UPDATE)) {
@@ -119,6 +118,7 @@ public class BetterStorageWidgetProvider extends AppWidgetProvider {
             final int id = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
             Log.d(TAG, "onReceive->update: " + id);
 
+            updateData(context);
             mgr.notifyAppWidgetViewDataChanged(arrayOfId, R.id.storage_list);          
         }
 
@@ -131,5 +131,12 @@ public class BetterStorageWidgetProvider extends AppWidgetProvider {
             updateAppWidget(context, appWidgetManager, appWidgetIds[j]);
         }
         super.onUpdate(context, appWidgetManager, appWidgetIds);
+    }
+    
+    private void updateData(Context context) {
+        final ContentResolver r = context.getContentResolver();
+        // This should indicate the row but doesn't matter as update doesn't use it
+        final Uri uri = ContentUris.withAppendedId(StorageDataProvider.CONTENT_URI, 0); 
+        r.update(uri, null, null, null);    	
     }
 }
