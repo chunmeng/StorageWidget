@@ -65,7 +65,7 @@ public class StorageListAdapter implements RemoteViewsService.RemoteViewsFactory
 
     @Override
     public RemoteViews getViewAt(int position) {
-        Log.d(TAG, "getViewAt " + position + " - " + this.mAppWidgetId);
+        // Log.d(TAG, "getViewAt " + position + " - " + this.mAppWidgetId);
         
         RemoteViews rv = new RemoteViews(this.mContext.getPackageName(), R.layout.simple_data_image);
         try {

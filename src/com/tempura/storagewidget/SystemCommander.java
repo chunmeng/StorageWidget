@@ -54,7 +54,7 @@ public class SystemCommander {
         			  
         				// Check if important?        			  
         				if (StorageNode.isPartitionImportant(path)) {
-        					Log.d(TAG, "--- " + path + " is important!");
+        					Log.d(TAG, "--- " + path + " is parsed!");
         					// Yes - Pass the path to StatFs to get stats
         					// Is this the external storage path?
         					if (Environment.getExternalStorageDirectory().getPath().equals(path)) {
