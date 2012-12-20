@@ -16,6 +16,9 @@ Advanced:
 - Support common cloud storage (dropbox, gdrive, skydrive etc)
 
 Update 2012/12/19:
+Release 1.1.1
+- Fix JB grantUriPermission crash.
+
 Release 1.1.0
 - Multiple widgets possible (althrough they all display same info at the moment)
 - External SD card detection 

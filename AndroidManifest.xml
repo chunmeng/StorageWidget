@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.tempura.storagewidget"
-    android:versionCode="5"
-    android:versionName="1.1.0" >
+    android:versionCode="6"
+    android:versionName="1.1.1" >
 
     <uses-sdk
         android:minSdkVersion="11"
@@ -53,7 +53,10 @@
         <!-- The content provider serving the storage data to display -->
         <!-- NOTE TO SELF: Must not use .StorageDataProvider, or else will get Failed to find provider info error  -->
         <provider android:name="StorageDataProvider"
-              android:authorities="com.tempura.storagewidget.provider" />        
+            android:authorities="com.tempura.storagewidget.provider"
+            android:exported="true"
+            android:enabled="true"
+            android:grantUriPermissions="true"/>        
     </application>
 
 </manifest>
